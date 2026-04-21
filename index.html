@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>🖥️ MULTI OS SIMULATOR | Advanced Algorithms</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: radial-gradient(circle at 30% 10%, #0b0f1c, #010105);
+  font-family: 'Inter', system-ui, 'Segoe UI', sans-serif;
+  color: #eef5ff;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.wrap {
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.hero {
+  background: rgba(0, 20, 40, 0.7);
+  backdrop-filter: blur(16px);
+  border-radius: 2rem;
+  padding: 1.2rem 2rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(0, 255, 255, 0.5);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+  animation: floatGlow 3s infinite alternate;
+}
+
+@keyframes floatGlow {
+  0% { box-shadow: 0 0 5px rgba(0, 255, 255, 0.2); border-color: rgba(0, 255, 255, 0.3); }
+  100% { box-shadow: 0 0 25px rgba(0, 255, 255, 0.6); border-color: rgba(0, 255, 255, 0.9); }
+}
+
+.hero h1 {
+  font-size: 2.3rem;
+  background: linear-gradient(135deg, #ffb347, #ff6b6b, #a855f7, #2dd4bf);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: textPulse 2s infinite;
+}
+
+@keyframes textPulse {
+  0% { filter: drop-shadow(0 0 2px cyan); }
+  100% { filter: drop-shadow(0 0 10px magenta); }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 1.5rem;
+}
+
+.panel {
+  background: rgba(0, 15, 30, 0.75);
+  backdrop-filter: blur(12px);
+  border-radius: 2rem;
+  padding: 1.3rem;
+  border: 1px solid rgba(255, 100, 200, 0.5);
+  transition: all 0.3s ease;
+  height: fit-content;
+}
+
+.panel button {
+  width: 100%;
+  margin: 0.6rem 0;
+  padding: 12px;
+  background: linear-gradient(95deg, #1a2a3a, #0a0f1a);
+  border: 1px solid #ff66aa;
+  border-radius: 1.2rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.panel button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.panel button:hover::after {
+  left: 100%;
+}
+
+.panel button:hover {
+  transform: translateY(-3px) scale(1.02);
+  background: linear-gradient(95deg, #2d3f55, #1a1f2e);
+  border-color: #ff88dd;
+  box-shadow: 0 8px 20px rgba(255, 102, 204, 0.3);
+}
+
+.main {
+  background: rgba(5, 15, 25, 0.65);
+  backdrop-filter: blur(12px);
+  border-radius: 2rem;
+  padding: 1.6rem;
+  border: 1px solid rgba(0, 255, 200, 0.4);
+  animation: fadeSlideUp 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 1rem;
+  margin: 1.2rem 0;
+}
+
+.glass-card {
+  background: rgba(20, 30, 55, 0.75);
+  border-radius: 1.2rem;
+  padding: 1rem;
+  border: 1px solid rgba(0, 255, 200, 0.3);
+  backdrop-filter: blur(4px);
+  transition: all 0.2s ease;
+  animation: cardGlow 0.4s ease-out;
+}
+
+.glass-card:hover {
+  transform: scale(1.01) translateY(-2px);
+  border-color: #ff66cc;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+
+@keyframes cardGlow {
+  0% { opacity: 0; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.bar-container {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  min-height: 220px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.bar-item {
+  flex: 1;
+  min-width: 60px;
+  background: linear-gradient(0deg, #ff4d4d, #ffaa44);
+  border-radius: 14px 14px 8px 8px;
+  transition: height 0.5s cubic-bezier(0.34, 1.2, 0.64, 1);
+  box-shadow: 0 -3px 12px rgba(255, 100, 0, 0.5);
+  position: relative;
+  cursor: pointer;
+}
+
+.bar-item span {
+  position: absolute;
+  bottom: 105%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #000000cc;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  white-space: nowrap;
+  font-weight: bold;
+}
+
+.gantt {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 1rem 0;
+  background: #0a1020cc;
+  padding: 12px;
+  border-radius: 1.2rem;
+  overflow-x: auto;
+}
+
+.gantt-block {
+  background: linear-gradient(145deg, #2dd4bf, #14b8a6);
+  color: #010101;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 40px;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+  animation: popIn 0.3s;
+  white-space: nowrap;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.input-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 15px 0;
+  align-items: center;
+}
+
+input, select, textarea {
+  background: #111a2b;
+  border: 1px solid #33ccff;
+  padding: 10px 14px;
+  border-radius: 1rem;
+  color: white;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #ff66cc;
+  box-shadow: 0 0 12px #ff66cc;
+  outline: none;
+}
+
+button.sim-btn {
+  background: linear-gradient(95deg, #f0a500, #ff5e7c);
+  border: none;
+  padding: 10px 24px;
+  border-radius: 2rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+button.sim-btn:hover {
+  transform: scale(1.03);
+  background: linear-gradient(95deg, #ffb347, #ff3b6f);
+}
+
+.proc-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+}
+
+.proc-table th, .proc-table td {
+  padding: 10px;
+  border-bottom: 1px solid #33ccff66;
+  text-align: center;
+}
+
+.proc-table th {
+  background: #0a0f1f;
+  color: #ffcc88;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  color: #ffaa66;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: 0.1s;
+  padding: 4px 8px;
+}
+
+.icon-btn:hover {
+  color: #ff3399;
+  transform: scale(1.2);
+}
+
+.frame-visual {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin: 15px 0;
+}
+
+.frame-cell {
+  background: #1e2a3a;
+  border: 2px solid cyan;
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  transition: 0.2s;
+}
+
+.frame-cell.hit {
+  border-color: #4ade80;
+  box-shadow: 0 0 12px #4ade80;
+}
+
+.frame-cell.fault {
+  border-color: #ff5555;
+  box-shadow: 0 0 12px #ff5555;
+  animation: shake 0.2s ease-in-out 0s 2;
+}
+
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+@media (max-width: 860px) {
+  .grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 1.6rem; }
+}
+</style>
+</head>
+<body>
+<div class='wrap'>
+  <div class='hero'>
+    <h1>🖥️ MULTI OS SIMULATOR · ENHANCED</h1>
+    <p>🎛️ Advanced Algorithms | Real-time Animations | Full Process Control | User Friendly</p>
+  </div>
+  <div class='grid'>
+    <div class='panel'>
+      <h3>💎 MODULES</h3>
+      <button id="btnCPU" title="CPU Scheduling with FCFS, SJF, Priority, RR, Preemptive Priority">🖥️ CPU Scheduling</button>
+      <button id="btnPage" title="FIFO, LRU, Optimal, Clock algorithms">📄 Page Replacement</button>
+      <button id="btnDisk" title="FCFS, SSTF, SCAN, C-SCAN, C-LOOK">💽 Disk Scheduling</button>
+      <button id="btnMemory" title="First, Best, Worst, Next Fit Allocation">🧠 Memory Allocation</button>
+      <button id="btnProcessMgr" title="Manage processes (add/edit/delete/random)">➕ Process Manager</button>
+      <button id="btnDeadlock" title="Banker's Algorithm Safety Check">🔒 Deadlock Solver</button>
+    </div>
+    <div class='main' id='view'></div>
+  </div>
+</div>
+
+<script>
+  let globalProcesses = [
+    { pid: "Alpha", arrival: 0, burst: 6, priority: 2 },
+    { pid: "Beta", arrival: 1, burst: 4, priority: 1 },
+    { pid: "Gamma", arrival: 2, burst: 9, priority: 3 },
+    { pid: "Delta", arrival: 3, burst: 5, priority: 2 }
+  ];
+
+  const viewDiv = document.getElementById('view');
+
+  function renderProcessManager() {
+    viewDiv.innerHTML = `
+      <h2>📋 Process Manager — Full Control</h2>
+      <div class="glass-card" style="margin-bottom: 15px;">
+        ✏️ Edit inline (click any cell), add custom processes, randomize, or reset.
+      </div>
+      <div id="managerTable"></div>
+      <div class="input-group" style="margin-top: 20px; flex-wrap: wrap;">
+        <input type="text" id="mPid" placeholder="Unique ID" value="TASK-X">
+        <input type="number" id="mArrival" placeholder="Arrival" value="0">
+        <input type="number" id="mBurst" placeholder="Burst" value="5">
+        <input type="number" id="mPriority" placeholder="Priority" value="2">
+        <button class="sim-btn" id="addManagerProc">✨ Add</button>
+        <button class="sim-btn" id="randomProcBtn">🎲 Random Process</button>
+        <button class="sim-btn" id="resetDefaultProc">🔄 Reset Defaults</button>
+        <button class="sim-btn" id="clearAllProc">🗑️ Clear All</button>
+      </div>
+      <div class="glass-card">💡 Tip: Process changes reflect instantly in CPU Scheduling module.</div>
+    `;
+    refreshManagerTable();
+    document.getElementById("addManagerProc").onclick = () => {
+      let pid = document.getElementById("mPid").value.trim();
+      let arr = parseInt(document.getElementById("mArrival").value);
+      let burst = parseInt(document.getElementById("mBurst").value);
+      let prio = parseInt(document.getElementById("mPriority").value);
+      if(!pid || isNaN(arr) || isNaN(burst) || isNaN(prio)) return alert("Fill valid fields");
+      globalProcesses.push({ pid, arrival: arr, burst: Math.max(1,burst), priority: prio });
+      refreshManagerTable();
+    };
+    document.getElementById("randomProcBtn").onclick = () => {
+      const names = ["Nova", "Echo", "Flux", "Zenith", "Orbit", "Vortex"];
+      let randName = names[Math.floor(Math.random() * names.length)] + Math.floor(Math.random() * 100);
+      let randArr = Math.floor(Math.random() * 5);
+      let randBurst = Math.floor(Math.random() * 8) + 2;
+      let randPrio = Math.floor(Math.random() * 5) + 1;
+      globalProcesses.push({ pid: randName, arrival: randArr, burst: randBurst, priority: randPrio });
+      refreshManagerTable();
+    };
+    document.getElementById("resetDefaultProc").onclick = () => {
+      globalProcesses = [
+        { pid: "Alpha", arrival: 0, burst: 6, priority: 2 },
+        { pid: "Beta", arrival: 1, burst: 4, priority: 1 },
+        { pid: "Gamma", arrival: 2, burst: 9, priority: 3 },
+        { pid: "Delta", arrival: 3, burst: 5, priority: 2 }
+      ];
+      refreshManagerTable();
+    };
+    document.getElementById("clearAllProc").onclick = () => { globalProcesses = []; refreshManagerTable(); };
+  }
+
+  function refreshManagerTable() {
+    const container = document.getElementById("managerTable");
+    if(!container) return;
+    let html = `<table class="proc-table"><thead><tr><th>PID (unique)</th><th>Arrival</th><th>Burst</th><th>Priority</th><th>Actions</th></tr></thead><tbody>`;
+    globalProcesses.forEach((p, idx) => {
+      html += `<tr>
+        <td contenteditable="true" class="editable-pid" data-idx="${idx}" data-field="pid">${p.pid}</td>
+        <td contenteditable="true" class="editable-arrival" data-idx="${idx}" data-field="arrival">${p.arrival}</td>
+        <td contenteditable="true" class="editable-burst" data-idx="${idx}" data-field="burst">${p.burst}</td>
+        <td contenteditable="true" class="editable-priority" data-idx="${idx}" data-field="priority">${p.priority}</td>
+        <td><button class="icon-btn" onclick="window.deleteProcess(${idx})">🗑️</button> <button class="icon-btn" onclick="window.duplicateProcess(${idx})">📋</button></td>
+      </tr>`;
+    });
+    html += `</tbody></table>`;
+    container.innerHTML = html;
+    document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+      el.addEventListener('blur', function() {
+        let idx = parseInt(this.getAttribute('data-idx'));
+        let field = this.getAttribute('data-field');
+        let newVal = this.innerText.trim();
+        if(field === 'pid') globalProcesses[idx].pid = newVal;
+        else if(field === 'arrival') globalProcesses[idx].arrival = parseInt(newVal) || 0;
+        else if(field === 'burst') globalProcesses[idx].burst = Math.max(1, parseInt(newVal) || 1);
+        else if(field === 'priority') globalProcesses[idx].priority = parseInt(newVal) || 5;
+        refreshManagerTable();
+      });
+    });
+  }
+  window.deleteProcess = (idx) => { globalProcesses.splice(idx,1); refreshManagerTable(); };
+  window.duplicateProcess = (idx) => { let copy = {...globalProcesses[idx], pid: globalProcesses[idx].pid+"_copy"}; globalProcesses.push(copy); refreshManagerTable(); };
+
+  function renderCPU() {
+    viewDiv.innerHTML = `
+      <h2>⚙️ CPU Scheduling — Advanced</h2>
+      <div class="input-group">
+        <select id="cpuAlgo">
+          <option value="fcfs">FCFS (Non-preemptive)</option><option value="sjf">SJF (Non-preemptive)</option>
+          <option value="priority">Priority (Non-preemptive)</option><option value="rr">Round Robin (Q=2)</option>
+          <option value="preemptive_priority">⚡ Priority (Preemptive)</option>
+        </select>
+        <button class="sim-btn" id="runCpuSim">🚀 RUN SIMULATION</button>
+        <button class="sim-btn" id="randomProcessesCPU">🎲 Random Processes</button>
+      </div>
+      <div class="glass-card">📌 Current Processes: <span id="procCount"></span></div>
+      <div id="cpuResultArea"></div>
+    `;
+    document.getElementById("runCpuSim").onclick = () => runCPUSim();
+    document.getElementById("randomProcessesCPU").onclick = () => {
+      for(let i=0;i<3;i++) {
+        let names = ["Titan", "Aurora", "Nebula", "Photon"];
+        globalProcesses.push({ pid: names[i%4]+Math.floor(Math.random()*99), arrival: Math.floor(Math.random()*4), burst: Math.floor(Math.random()*7)+2, priority: Math.floor(Math.random()*4)+1 });
+      }
+      runCPUSim();
+    };
+    runCPUSim();
+  }
+
+  function runCPUSim() {
+    let algo = document.getElementById("cpuAlgo").value;
+    let procs = globalProcesses.map(p => ({ ...p }));
+    if(procs.length === 0) { document.getElementById("cpuResultArea").innerHTML = `<div class="glass-card">⚠️ No processes. Add in Process Manager.</div>`; return; }
+    document.getElementById("procCount") && (document.getElementById("procCount").innerText = procs.map(p=>p.pid).join(', '));
+    let result;
+    if(algo === "fcfs") result = fcfs(procs);
+    else if(algo === "sjf") result = sjf(procs);
+    else if(algo === "priority") result = prioritySched(procs);
+    else if(algo === "rr") result = rrSched(procs, 2);
+    else if(algo === "preemptive_priority") result = preemptivePriority(procs);
+    else result = fcfs(procs);
+    
+    let gantt = `<div class="gantt"><strong>📊 Gantt Chart:</strong> ${result.timeline.map(seg => `<div class="gantt-block">${seg.pid} (${seg.start}-${seg.end})</div>`).join('')}</div>`;
+    let stats = `<div class="card-grid">${result.stats.map(s => `<div class="glass-card"><strong>${s.pid}</strong><br>⏱️ Wait: ${s.wait}<br>🔄 Turnaround: ${s.tat}</div>`).join('')}</div>`;
+    let avgWait = (result.stats.reduce((a,b)=>a+b.wait,0)/result.stats.length).toFixed(2);
+    let avgTAT = (result.stats.reduce((a,b)=>a+b.tat,0)/result.stats.length).toFixed(2);
+    let bars = `<div class="bar-container">${procs.map(p => `<div class="bar-item" style="height:${Math.min(p.burst*12, 150)}px;"><span>${p.pid}<br>${p.burst}</span></div>`).join('')}</div>`;
+    document.getElementById("cpuResultArea").innerHTML = `${bars}${gantt}${stats}<div class="glass-card" style="background:#0f172a;">📈 Avg Wait: ${avgWait} | Avg TAT: ${avgTAT}</div>`;
+  }
+
+  function fcfs(procs) { let sorted = [...procs].sort((a,b)=>a.arrival-b.arrival), time=0, timeline=[], stats=[]; for(let p of sorted){ let start=Math.max(time,p.arrival), end=start+p.burst; timeline.push({pid:p.pid,start,end}); stats.push({pid:p.pid, wait:end-p.arrival-p.burst, tat:end-p.arrival}); time=end; } return {timeline,stats}; }
+  function sjf(procs) { let rem = procs.map(p=>({...p,rem:p.burst})), timeline=[], time=0, done=new Set(), stats=[]; while(done.size<procs.length){ let avail=rem.filter(p=>p.arrival<=time && !done.has(p.pid)); if(!avail.length){ time++; continue; } avail.sort((a,b)=>a.rem-b.rem); let curr=avail[0]; let start=time, end=time+curr.rem; timeline.push({pid:curr.pid,start,end}); stats.push({pid:curr.pid, wait:end-curr.arrival-curr.burst, tat:end-curr.arrival}); done.add(curr.pid); time=end; } return {timeline,stats}; }
+  function prioritySched(procs) { let rem = procs.map(p=>({...p,rem:p.burst})), timeline=[], time=0, done=new Set(), stats=[]; while(done.size<procs.length){ let avail=rem.filter(p=>p.arrival<=time && !done.has(p.pid)); if(!avail.length){ time++; continue; } avail.sort((a,b)=>a.priority-b.priority); let curr=avail[0]; let start=time, end=time+curr.rem; timeline.push({pid:curr.pid,start,end}); stats.push({pid:curr.pid, wait:end-curr.arrival-curr.burst, tat:end-curr.arrival}); done.add(curr.pid); time=end; } return {timeline,stats}; }
+  function rrSched(procs, quantum) { let queue = [...procs.map(p=>({...p,rem:p.burst}))].sort((a,b)=>a.arrival-b.arrival); let timeline=[], time=0, statsMap=new Map(), ready=[], idx=0; while(queue.length || ready.length){ while(idx<queue.length && queue[idx].arrival<=time) ready.push(queue[idx++]); if(ready.length===0){ time = queue[idx]?.arrival || time+1; continue; } let curr=ready.shift(); let exec=Math.min(quantum,curr.rem); let start=time, end=time+exec; timeline.push({pid:curr.pid,start,end}); curr.rem-=exec; time=end; while(idx<queue.length && queue[idx].arrival<=time) ready.push(queue[idx++]); if(curr.rem>0) ready.push(curr); else { let orig=procs.find(p=>p.pid===curr.pid); let tat=time-orig.arrival; statsMap.set(curr.pid,{pid:curr.pid, wait:tat-curr.burst, tat}); } } return {timeline, stats:Array.from(statsMap.values())}; }
+  function preemptivePriority(procs) {
+    let processes = procs.map(p => ({...p, remaining: p.burst, completed: false}));
+    let time = 0, done = 0, timeline = [], stats = [];
+    let current = null, startTime = 0;
+    while(done < processes.length) {
+      let available = processes.filter(p => p.arrival <= time && !p.completed);
+      if(available.length === 0) { time++; continue; }
+      let nextProc = available.reduce((a,b) => a.priority < b.priority ? a : b);
+      if(!current || current.pid !== nextProc.pid) {
+        if(current) timeline.push({pid: current.pid, start: startTime, end: time});
+        current = nextProc;
+        startTime = time;
+      }
+      let execTime = 1;
+      current.remaining -= execTime;
+      time += execTime;
+      if(current.remaining === 0) {
+        timeline.push({pid: current.pid, start: startTime, end: time});
+        let tat = time - current.arrival;
+        stats.push({pid: current.pid, wait: tat - current.burst, tat});
+        current.completed = true;
+        done++;
+        current = null;
+      }
+    }
+    return {timeline, stats};
+  }
+
+  function renderPage() {
+    viewDiv.innerHTML = `
+      <h2>📄 Page Replacement (FIFO, LRU, Optimal, CLOCK)</h2>
+      <div class="input-group">
+        <input type="text" id="refString" value="7,0,1,2,0,3,0,4,2,3,0,3,2" style="flex:2">
+        <input type="number" id="frameCount" value="3" min="1" max="6">
+        <select id="pageAlgo"><option value="fifo">FIFO</option><option value="lru">LRU</option><option value="optimal">Optimal</option><option value="clock">Clock (Second Chance)</option></select>
+        <button class="sim-btn" id="simPageBtn">⚡ SIMULATE</button>
+        <button class="sim-btn" id="randomRefBtn">🎲 Random Ref</button>
+      </div>
+      <div id="pageResult"></div>
+    `;
+    document.getElementById("simPageBtn").onclick = () => runPageSim();
+    document.getElementById("randomRefBtn").onclick = () => {
+      let len = 12;
+      let randRef = Array.from({length: len}, () => Math.floor(Math.random() * 9));
+      document.getElementById("refString").value = randRef.join(",");
+      runPageSim();
+    };
+    runPageSim();
+  }
+  function runPageSim() {
+    let ref = document.getElementById("refString").value.split(',').map(v=>parseInt(v.trim())).filter(v=>!isNaN(v));
+    let fc = parseInt(document.getElementById("frameCount").value);
+    let algo = document.getElementById("pageAlgo").value;
+    let res = (algo === 'clock') ? pageSimClock(ref, fc) : pageSim(ref, fc, algo);
+    let stepsHtml = `<div class="frame-visual">${res.steps.map((step,i)=>`<div class="frame-cell ${step.fault ? 'fault' : 'hit'}">Step ${i+1}: ${step.page}<br>[${step.frames.join(',')}]</div>`).join('')}</div>`;
+    document.getElementById("pageResult").innerHTML = `<div class="glass-card">🔁 Total Page Faults: <strong style="color:#ffaa44;">${res.faults}</strong></div>${stepsHtml}`;
+  }
+  function pageSim(ref, fc, algo) { let frames=[], faults=0, steps=[]; for(let i=0;i<ref.length;i++){ let page=ref[i], fault=false; if(!frames.includes(page)){ fault=true; faults++; if(frames.length<fc) frames.push(page); else { if(algo==='fifo') frames.shift(); else if(algo==='lru'){ let idx=findLRU(ref,i,frames); frames.splice(idx,1); } else { let idx=findOptimal(ref,i,frames); frames.splice(idx,1); } frames.push(page); } } else if(algo==='lru'){ let idx=frames.indexOf(page); frames.splice(idx,1); frames.push(page); } steps.push({page, frames:[...frames], fault}); } return {faults, steps}; }
+  function findLRU(ref,cur,frames){ let used=frames.map(f=>ref.lastIndexOf(f,cur-1)); return used.indexOf(Math.min(...used)); }
+  function findOptimal(ref,cur,frames){ for(let i=0;i<frames.length;i++) if(ref.slice(cur+1).indexOf(frames[i])===-1) return i; let far=-1,idx=0; for(let i=0;i<frames.length;i++){ let next=ref.slice(cur+1).indexOf(frames[i]); if(next>far){ far=next; idx=i; } } return idx; }
+  function pageSimClock(ref, framesCount) { let frames = [], refBits = [], faults = 0, steps = [], hand = 0; for(let page of ref) { let idx = frames.indexOf(page); if(idx !== -1) { refBits[idx] = 1; steps.push({page, frames:[...frames], fault: false}); continue; } faults++; let placed = false; while(!placed) { if(hand >= frames.length) hand = 0; if(frames.length < framesCount) { frames.push(page); refBits.push(1); placed = true; } else if(refBits[hand] === 0) { frames[hand] = page; refBits[hand] = 1; placed = true; } else { refBits[hand] = 0; hand++; } } hand = (hand + 1) % framesCount; steps.push({page, frames:[...frames], fault: true}); } return {faults, steps}; }
+
+  function renderDisk() {
+    viewDiv.innerHTML = `<h2>💽 Disk Scheduling (FCFS, SSTF, SCAN, C-SCAN, C-LOOK)</h2><div class="input-group"><input id="diskRequests" value="98,183,37,122,14,124,65,67"><input id="diskHead" value="53"><select id="diskAlgo"><option>fcfs</option><option>sstf</option><option>scan</option><option>c-scan</option><option>c-look</option></select><button class="sim-btn" id="simDiskBtn">🌀 SIMULATE</button></div><div id="diskResult"></div>`;
+    document.getElementById("simDiskBtn").onclick = () => {
+      let req = document.getElementById("diskRequests").value.split(',').map(v=>parseInt(v.trim())).filter(v=>!isNaN(v));
+      let head = parseInt(document.getElementById("diskHead").value);
+      let algo = document.getElementById("diskAlgo").value;
+      let res = advancedDiskSim(req, head, algo);
+      document.getElementById("diskResult").innerHTML = `<div class="glass-card">🎯 Total Seek: <strong>${res.total}</strong> tracks</div><div class="gantt">📍 Order: ${res.order.map(o=>`<div class="gantt-block">${o}</div>`).join('')}</div><div class="glass-card">Path: ${res.path.join(' → ')}</div>`;
+    };
+  }
+  function advancedDiskSim(requests, head, algo) { let reqs=[...requests], total=0, cur=head, order=[], path=[head]; if(algo==='fcfs'){ for(let r of reqs){ total+=Math.abs(cur-r); cur=r; order.push(r); path.push(r); } } else if(algo==='sstf'){ while(reqs.length){ let closest=reqs.reduce((a,b)=>Math.abs(a-cur)<Math.abs(b-cur)?a:b); total+=Math.abs(cur-closest); cur=closest; order.push(closest); path.push(closest); reqs=reqs.filter(r=>r!==closest); } } else if(algo==='scan'){ let left=[], right=[]; reqs.forEach(r=> r>=head? right.push(r): left.push(r)); right.sort((a,b)=>a-b); left.sort((a,b)=>b-a); let seq=[...right, ...left]; for(let r of seq){ total+=Math.abs(cur-r); cur=r; order.push(r); path.push(r); } } else if(algo==='c-scan'){ let left=[], right=[]; reqs.forEach(r=> r>=head? right.push(r): left.push(r)); right.sort((a,b)=>a-b); left.sort((a,b)=>a-b); let maxCyl=199; let seq = [...right, maxCyl, 0, ...left]; for(let r of seq){ total+=Math.abs(cur-r); cur=r; order.push(r); path.push(r); } } else if(algo==='c-look'){ let left=[], right=[]; reqs.forEach(r=> r>=head? right.push(r): left.push(r)); right.sort((a,b)=>a-b); left.sort((a,b)=>a-b); let seq = [...right, ...left]; for(let r of seq){ total+=Math.abs(cur-r); cur=r; order.push(r); path.push(r); } } return {total, order, path}; }
+
+  function renderMemory() {
+    viewDiv.innerHTML = `<h2>🧠 Memory Allocation (First/Best/Worst/Next Fit)</h2><div class="input-group"><input id="memBlocks" value="100,500,200,300,600"><input id="memProcesses" value="212,417,112,426"><select id="fitAlgo"><option>first</option><option>best</option><option>worst</option><option>next</option></select><button class="sim-btn" id="simMemBtn">📦 ALLOCATE</button></div><div id="memResult"></div>`;
+    document.getElementById("simMemBtn").onclick = () => {
+      let blocks = document.getElementById("memBlocks").value.split(',').map(v=>parseInt(v.trim()));
+      let procs = document.getElementById("memProcesses").value.split(',').map(v=>parseInt(v.trim()));
+      let algo = document.getElementById("fitAlgo").value;
+      let res = memAllocAdvanced(blocks, procs, algo);
+      document.getElementById("memResult").innerHTML = `<div class="card-grid">${res.map(a=>`<div class="glass-card">📌 Process ${a.size}KB → ${a.status}</div>`).join('')}</div><div class="glass-card">💾 Remaining Blocks: ${res.remaining.join(', ')} KB</div>`;
+    };
+  }
+  function memAllocAdvanced(blocks, processes, algo) { let copy=[...blocks], result=[], lastIdx=0; for(let p of processes){ let idx=-1; if(algo==='first') idx=copy.findIndex(b=>b>=p); else if(algo==='best'){ let valid=copy.map((b,i)=>b>=p?{size:b,idx:i}:null).filter(v=>v); if(valid.length) idx=valid.reduce((a,b)=>a.size<b.size?a:b).idx; } else if(algo==='worst'){ let valid=copy.map((b,i)=>b>=p?{size:b,idx:i}:null).filter(v=>v); if(valid.length) idx=valid.reduce((a,b)=>a.size>b.size?a:b).idx; } else if(algo==='next'){ let start=lastIdx; for(let i=0;i<copy.length;i++){ let ci=(start+i)%copy.length; if(copy[ci]>=p){ idx=ci; lastIdx=(ci+1)%copy.length; break; } } } if(idx!==-1){ result.push({size:p, status:`Block ${idx+1} (${copy[idx]}KB) allocated`}); copy[idx]-=p; } else result.push({size:p, status:"❌ Not Allocated"}); } result.remaining=copy; return result; }
+
+  function renderDeadlock() {
+    viewDiv.innerHTML = `<h2>🔒 Banker's Algorithm (Safety Check)</h2><div class="input-group" style="flex-direction:column;"><textarea id="allocMatrix" rows="2" placeholder="0,1,0&#10;2,0,0&#10;3,0,2">0,1,0\n2,0,0\n3,0,2</textarea><textarea id="maxMatrix" rows="2" placeholder="7,5,3&#10;3,2,2&#10;9,0,2">7,5,3\n3,2,2\n9,0,2</textarea><input id="availVec" value="3,3,2"><button class="sim-btn" id="runBanker">🔐 CHECK SAFETY</button></div><div id="deadlockResult"></div>`;
+    document.getElementById("runBanker").onclick = () => {
+      let alloc = document.getElementById("allocMatrix").value.split('\n').map(r=>r.split(',').map(v=>parseInt(v.trim())));
+      let max = document.getElementById("maxMatrix").value.split('\n').map(r=>r.split(',').map(v=>parseInt(v.trim())));
+      let avail = document.getElementById("availVec").value.split(',').map(v=>parseInt(v.trim()));
+      let need = max.map((r,i)=>r.map((v,j)=>v-alloc[i][j]));
+      let work=[...avail], finish=new Array(alloc.length).fill(false), seq=[];
+      for(let it=0;it<alloc.length;it++) for(let i=0;i<alloc.length;i++) if(!finish[i] && need[i].every((n,j)=>n<=work[j])){ work=work.map((w,j)=>w+alloc[i][j]); finish[i]=true; seq.push(`P${i}`); }
+      let safe = finish.every(v=>v);
+      document.getElementById("deadlockResult").innerHTML = `<div class="glass-card">${safe ? `✅ SAFE Sequence: ${seq.join(' → ')}` : '⛔ DEADLOCK / UNSAFE STATE'}</div>`;
+    };
+  }
+
+  document.getElementById("btnCPU").onclick = renderCPU;
+  document.getElementById("btnPage").onclick = renderPage;
+  document.getElementById("btnDisk").onclick = renderDisk;
+  document.getElementById("btnMemory").onclick = renderMemory;
+  document.getElementById("btnProcessMgr").onclick = renderProcessManager;
+  document.getElementById("btnDeadlock").onclick = renderDeadlock;
+  renderCPU();
+</script>
+</body>
+</html>
